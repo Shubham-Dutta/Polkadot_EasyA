@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+td{
+  font-size: 15px;
+}
+thead th{
+  font-size: 18px;
+  background-color: #563d7c !important;
+  color: #ffffff !important;
+}
+
+.table{
+  background-color: white !important;
+}
+.brand-color{
+  color: #e6007a;
+}
+.font-weight-bold{
+  font-weight: bold;
+}
+.btn{
+  background-color: #563d7c !important;;
+}
