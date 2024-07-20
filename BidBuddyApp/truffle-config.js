@@ -58,6 +58,15 @@ module.exports = {
    */
 
   networks: {
+    moonbeam: {
+      provider: () => new HDWalletProvider(
+        'YOUR_MNEMONIC_HERE', 
+        'https://rpc.testnet.moonbeam.network'
+      ),
+      network_id: 1287,       // Moonbeam testnet network ID
+      gas: 5500000,           // Gas limit
+      gasPrice: 1000000000    // 1 GWei
+    }
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache, geth, or parity) in a separate terminal
