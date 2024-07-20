@@ -8,7 +8,7 @@ function App() {
           <div className='container'>
           <a className="navbar-brand" href="#">
             <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="" />
-            <span className='text-uppercase p-2 text-italic font-weight-bold'>Bidding Sysytem</span>
+            <span className='text-uppercase p-2 text-italic font-weight-bold'>Bid <span class="brand-color">Buddy</span></span>
           </a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
