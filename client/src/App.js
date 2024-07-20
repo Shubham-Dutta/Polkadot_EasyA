@@ -39,6 +39,30 @@ function App() {
       projectDeadline: '10th February 2028',
       deliverTargetDate: '25th December 2027',
     },
+    {
+      id: 4,
+      companyName: 'XYZ',
+      projectBudget: '$70000',
+      bidMoney: '$4400',
+      projectDeadline: '10th February 2028',
+      deliverTargetDate: '25th December 2027',
+    },
+    {
+      id: 5,
+      companyName: 'CFD',
+      projectBudget: '$70000',
+      bidMoney: '$4400',
+      projectDeadline: '10th February 2028',
+      deliverTargetDate: '25th December 2027',
+    },
+    {
+      id: 6,
+      companyName: 'ANO',
+      projectBudget: '$70000',
+      bidMoney: '$4400',
+      projectDeadline: '10th February 2028',
+      deliverTargetDate: '25th December 2027',
+    },
   ];
 
   return (
@@ -73,39 +97,41 @@ function App() {
       </nav>
       <header className="App-header">
         <div className="container-fluid">
-          <table className="table table-bordered">
-            <thead className="thead-dark">
-              <tr>
-                <th scope="col">SL. No.</th>
-                <th scope="col">Company Name</th>
-                <th scope="col">Project Budget</th>
-                <th scope="col">Bid Money</th>
-                <th scope="col">Project Deadline</th>
-                <th scope="col">Deliver Target Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project, index) => (
-                <tr key={project.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{project.companyName}</td>
-                  <td>{project.projectBudget}</td>
-                  <td>{project.bidMoney}</td>
-                  <td>{project.projectDeadline}</td>
-                  <td>{project.deliverTargetDate}</td>
-                  <td>
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => handleShow(project)}
-                    >
-                      View
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">SL. No.</th>
+                  <th scope="col">Company Name</th>
+                  <th scope="col">Project Budget</th>
+                  <th scope="col">Bid Money</th>
+                  <th scope="col">Project Deadline</th>
+                  <th scope="col">Deliver Target Date</th>
+                  <th scope="col">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {projects.map((project, index) => (
+                  <tr key={project.id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{project.companyName}</td>
+                    <td>{project.projectBudget}</td>
+                    <td>{project.bidMoney}</td>
+                    <td>{project.projectDeadline}</td>
+                    <td>{project.deliverTargetDate}</td>
+                    <td>
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={() => handleShow(project)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Modal show={showModal} onHide={handleClose}>
