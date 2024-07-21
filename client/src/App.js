@@ -2,11 +2,91 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { Modal, Button } from 'react-bootstrap';
+import { web3Enable, web3Accounts, web3FromSource } from '@polkadot/extension-dapp';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
+const BidForm = ({ onClose }) => {
+  const [account, setAccount] = useState(null);
+  const [api, setApi] = useState(null);
+  const [bidAmount, setBidAmount] = useState('');
+  const [rating, setRating] = useState('');
+
+  const connectToBlockchain = async () => {
+    const provider = new WsProvider('ws://localhost:9944'); // Adjust the WS URL to your node
+    const api = await ApiPromise.create({ provider });
+    setApi(api);
+  };
+
+  const connectWallet = async () => {
+    const extensions = await web3Enable('bid-buddy-app');
+    if (extensions.length === 0) {
+      return;
+    }
+    const accounts = await web3Accounts();
+    setAccount(accounts[0]);
+  };
+
+  const submitBid = async () => {
+    if (!api || !account) {
+      return;
+    }
+
+    const injector = await web3FromSource(account.meta.source);
+    await api.tx.bidding
+      .submitBid(bidAmount, rating)
+      .signAndSend(account.address, { signer: injector.signer });
+  };
+
+  return (
+    <div>
+    <button className="btn btn-primary mb-3 mr-2" onClick={connectToBlockchain}>
+      Connect Blockchain
+    </button>
+    <button className="btn btn-secondary mb-3 ml-1" onClick={connectWallet}>
+      Connect Wallet
+    </button>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        submitBid();
+      }}
+    >
+      <div className="form-group">
+        <label>Bid Amount:</label>
+        <input
+          type="number"
+          className="form-control"
+          value={bidAmount}
+          onChange={(e) => setBidAmount(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Rating:</label>
+        <input
+          type="number"
+          step="0.1"
+          className="form-control"
+          value={rating}
+          onChange={(e) => setRating(e.target.value)}
+        />
+      </div>
+      <div class="mt-3"></div>
+      <button type="submit" className="btn btn-success mr-3">
+        Submit Bid
+      </button>
+      <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
+        Close
+      </button>
+    </form>
+  </div>
+  );
+};
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
-  const [backendData, setBackendData] = useState([]); // Initialize as empty array
+  const [backendData, setBackendData] = useState([]);
+  const [showBidForm, setShowBidForm] = useState(false); // State to manage BidForm visibility
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,9 +96,7 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data); // Print the data to the console
-
-        // Ensure data is an array
+        console.log(data);
         if (Array.isArray(data)) {
           setBackendData(data);
         } else {
@@ -71,6 +149,15 @@ function App() {
       </nav>
       <header className="App-header">
         <div className="container-fluid">
+          <div className="d-flex justify-content-between mb-3">
+            <h2>Projects</h2>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowBidForm(true)}
+            >
+              Add Bid
+            </button>
+          </div>
           <div className="table-responsive">
             <table className="table table-bordered">
               <thead className="thead-dark">
@@ -131,6 +218,17 @@ function App() {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {showBidForm && (
+          <Modal show={showBidForm} onHide={() => setShowBidForm(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Submit Bid</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <BidForm onClose={() => setShowBidForm(false)} />
+            </Modal.Body>
+          </Modal>
+        )}
       </header>
     </div>
   );
