@@ -39,12 +39,14 @@ const BidForm = ({ onClose }) => {
 
   return (
     <div>
+    <div class="text-end">
     <button className="btn btn-primary mb-3 mr-2" onClick={connectToBlockchain}>
       Connect Blockchain
     </button>
     <button className="btn btn-secondary mb-3 ml-1" onClick={connectWallet}>
       Connect Wallet
     </button>
+    </div>
     <form
       onSubmit={(e) => {
         e.preventDefault();
@@ -71,12 +73,12 @@ const BidForm = ({ onClose }) => {
         />
       </div>
       <div class="mt-3"></div>
+      <div class="text-end">
       <button type="submit" className="btn btn-success mr-3">
         Submit Bid
       </button>
-      <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
-        Close
-      </button>
+      </div>
+      
     </form>
   </div>
   );
@@ -150,7 +152,7 @@ function App() {
       <header className="App-header">
         <div className="container-fluid">
           <div className="d-flex justify-content-between mb-3">
-            <h2>Projects</h2>
+            <h2>All Bids</h2>
             <button
               className="btn btn-primary"
               onClick={() => setShowBidForm(true)}
@@ -203,7 +205,7 @@ function App() {
 
         <Modal show={showModal} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Project Details</Modal.Title>
+            <Modal.Title>Bid Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p><strong>Company Name:</strong> {selectedProject.companyName}</p>
