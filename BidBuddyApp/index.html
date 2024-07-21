@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moonbeam dApp</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+</head>
+<body>
+  <h1>Verify Signature on Moonbeam</h1>
+  <script>
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    const contractAddress = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+    const contractABI = [
+      // ABI of your VerifySignature contract
+      "function recoverSigner(bytes32 message, bytes memory signature) public view returns (address)"
+    ];
+
+    const verifySignatureContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    async function verifySignature(message, signature) {
+      const signerAddress = await verifySignatureContract.recoverSigner(message, signature);
+      console.log('Signer Address:', signerAddress);
+    }
+
+    // Example usage
+    const message = ethers.utils.id("Hello, Moonbeam!");
+    const signature = "0x...";
+    verifySignature(message, signature);
+  </script>
+</body>
+</html>
