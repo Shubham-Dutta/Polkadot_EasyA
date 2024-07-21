@@ -92,7 +92,7 @@ function App() {
                 ) : (
                   backendData.map((project, index) => (
                     <tr key={project.id}>
-                      <th scope="row">{index + 1}</th>
+                      <td scope="row">{index + 1}</td>
                       <td>{project.companyName}</td>
                       <td>{project.projectBudget}</td>
                       <td>{project.bidMoney}</td>
