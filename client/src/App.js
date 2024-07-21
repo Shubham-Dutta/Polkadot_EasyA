@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { Modal, Button } from 'react-bootstrap';
@@ -6,6 +6,31 @@ import { Modal, Button } from 'react-bootstrap';
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
+  const [backendData, setBackendData] = useState([]); // Initialize as empty array
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data); // Print the data to the console
+
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setBackendData(data);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleShow = (project) => {
     setSelectedProject(project);
@@ -13,33 +38,6 @@ function App() {
   };
 
   const handleClose = () => setShowModal(false);
-
-  const projects = [
-    {
-      id: 1,
-      companyName: 'ABC',
-      projectBudget: '$50000',
-      bidMoney: '$2400',
-      projectDeadline: '26th January 2028',
-      deliverTargetDate: '16th December 2027',
-    },
-    {
-      id: 2,
-      companyName: 'DEF',
-      projectBudget: '$60000',
-      bidMoney: '$3400',
-      projectDeadline: '30th January 2028',
-      deliverTargetDate: '20th December 2027',
-    },
-    {
-      id: 3,
-      companyName: 'GHI',
-      projectBudget: '$70000',
-      bidMoney: '$4400',
-      projectDeadline: '10th February 2028',
-      deliverTargetDate: '25th December 2027',
-    },
-  ];
 
   return (
     <div className="App">
@@ -73,39 +71,47 @@ function App() {
       </nav>
       <header className="App-header">
         <div className="container-fluid">
-          <table className="table table-bordered">
-            <thead className="thead-dark">
-              <tr>
-                <th scope="col">SL. No.</th>
-                <th scope="col">Company Name</th>
-                <th scope="col">Project Budget</th>
-                <th scope="col">Bid Money</th>
-                <th scope="col">Project Deadline</th>
-                <th scope="col">Deliver Target Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project, index) => (
-                <tr key={project.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{project.companyName}</td>
-                  <td>{project.projectBudget}</td>
-                  <td>{project.bidMoney}</td>
-                  <td>{project.projectDeadline}</td>
-                  <td>{project.deliverTargetDate}</td>
-                  <td>
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => handleShow(project)}
-                    >
-                      View
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">SL. No.</th>
+                  <th scope="col">Company Name</th>
+                  <th scope="col">Project Budget</th>
+                  <th scope="col">Bid Money</th>
+                  <th scope="col">Project Deadline</th>
+                  <th scope="col">Deliver Target Date</th>
+                  <th scope="col">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {backendData.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="text-center">Loading...</td>
+                  </tr>
+                ) : (
+                  backendData.map((project, index) => (
+                    <tr key={project.id}>
+                      <td scope="row">{index + 1}</td>
+                      <td>{project.companyName}</td>
+                      <td>{project.projectBudget}</td>
+                      <td>{project.bidMoney}</td>
+                      <td>{project.projectDeadline}</td>
+                      <td>{project.deliverTargetDate}</td>
+                      <td>
+                        <button
+                          className="btn btn-success btn-sm"
+                          onClick={() => handleShow(project)}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Modal show={showModal} onHide={handleClose}>
